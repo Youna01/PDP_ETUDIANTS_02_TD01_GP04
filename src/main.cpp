@@ -2,6 +2,19 @@
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
 #include <DHT_U.h>
+// #include <Blynk.h>
+#include <WiFi.h>
+#include <WiFiClient.h>
+
+
+
+
+#define BLYNK_TEMPLATE_ID "TMPL50CI-5826"
+#define BLYNK_TEMPLATE_NAME "Modele TP2"
+#define BLYNK_AUTH_TOKEN "vLjfkKUFOyfb_LkdqvMvOwp2ejsEfNJp"
+#define BLYNK_PRINT Serial
+
+#include <BlynkSimpleEsp32.h>
 
 // Define the pins that we will use
 #define SENSOR 33
@@ -14,6 +27,10 @@ DHT_Unified dht(SENSOR, DHTTYPE);
 // ...
 // ...
 // ...
+
+// Avant le setup
+char ssid[] = "Lucas";
+char pass[] = "lucas1777";
 
 void setup() {
   // Setup pins
@@ -28,6 +45,11 @@ void setup() {
   // ...
   // ...
   // ...
+  // ...
+
+// Au début du setup, après la connexion série
+Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
+Blynk.run();
 
   // Start listening to the DHT11
   dht.begin();
@@ -62,6 +84,12 @@ void setup() {
   // ...
   // ...
   // ...
+
+
+  // Envoyer les données à Blynk
+  Blynk.virtualWrite(V1, relative_humidity_measure);  // Utilisez le bon numéro de widget virtuel (V1 dans cet exemple)
+  Blynk.virtualWrite(V2, temp_measure);  // Utilisez le bon numéro de widget virtuel (V2 dans cet exemple)
+
 
   Serial.println("Going to sleep for 5 seconds...");
   delay(100);
