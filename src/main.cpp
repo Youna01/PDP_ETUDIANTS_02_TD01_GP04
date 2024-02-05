@@ -32,6 +32,18 @@ DHT_Unified dht(SENSOR, DHTTYPE);
 char ssid[] = "HelloWorld";
 char pass[] = "testtest";
 
+
+BLYNK_WRITE(V2)
+{
+  int pinValue = param.asInt(); // assigning incoming value from pin V0 to a variable
+  Serial.print("Received value from Blynk: ");
+  Serial.println(pinValue);
+  digitalWrite(LED,pinValue);
+  // Delay is only there so that we get a chance to see the LED value properly.
+  delay(1000);
+}
+
+
 void setup() {
   // Setup pins
   pinMode(LED, OUTPUT);
@@ -42,20 +54,13 @@ void setup() {
   delay(100);
 
   // begin the Blynk session
-//   BLYNK_WRITE(V2)///////////////////// question 18 
-// {
-//   int pinValue = param.asInt(); // assigning incoming value from pin V0 to a variable
-//   Serial.print("Received value from Blynk: ");
-//   Serial.println(pinValue);
-//   digitalWrite(LED,pinValue);
-//   // Delay is only there so that we get a chance to see the LED value properly.
-//   delay(1000);
-// }///////////////////////////
+
 
 // Au début du setup, après la connexion série
 Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
 Blynk.run();
-
+Blynk.syncVirtual(V2);
+delay(1000);
   // Start listening to the DHT11
   dht.begin();
 
